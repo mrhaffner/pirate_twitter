@@ -1,6 +1,6 @@
 # Pirate Twitter
 
-A Twitter clone where all tweets are translated into pirate speak.
+A pirate themed Twitter clone where all tweets are translated into pirate speak.
 
 ### Functional Requirements
 
