@@ -21,10 +21,7 @@ A pirate themed Twitter clone where all tweets are translated into pirate speak.
 - A Spring Boot API
   - Handles Authentication and Authorization
   - Handles basic CRUD operations related to Users and Tweets
-  - Sends new information to fanout service
   - Translates new Tweets to pirate speak
-- A Flask API fed by Apache Kafka
-  - A fanout service
-    - Updates Timelines as new Tweets are added in the background
+  - Generates Timelines
 - A React web app
   - Serves as the user interface
