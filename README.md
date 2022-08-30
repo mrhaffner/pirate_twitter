@@ -25,3 +25,7 @@ A pirate themed Twitter clone where all tweets are translated into pirate speak.
 - Generates Timelines
 - A React web app
 - Serves as the user interface
+
+### Acknowledgements
+
+Thanks to bezkoder - I used this great [article](https://www.bezkoder.com/spring-boot-jwt-authentication/) to set up authentication and authorization.
