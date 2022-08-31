@@ -27,20 +27,24 @@ public class TimelineController {
     private UserRepository userRepository;
 
     // needs pagination
-    @GetMapping
+    @GetMapping("/all")
     public List<Tweet> getPirateTimeline() {
-        List<Tweet> tweets = tweetRepository
-                                .findAll();
-        tweets.sort(Comparator.comparing(tweet -> tweet.getCreationTime()));        
+        List<Tweet> tweets = tweetRepository.findAll();
+        tweets.sort(Comparator
+                        .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder())
+                        );        
         return tweets;
     }
 
-    // reversed?
     @GetMapping("/{username}")
     public List<Tweet> getUserTweets(@PathVariable(value = "username") String username) throws Exception {
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-        return tweetRepository.findByUser(user);
+        List<Tweet> tweets = tweetRepository.findByUser(user);
+        tweets.sort(Comparator
+                .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder())
+                );        
+        return tweets;
     }
 }

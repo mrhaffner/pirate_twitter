@@ -41,6 +41,10 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  // json ignore?
+  @OneToMany
+  private Set<User> following = new HashSet<>();
+
   public User(String username, String password) {
     this.username = username;
     this.password = password;
