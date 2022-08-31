@@ -1,9 +1,12 @@
 package com.piritter.api.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +28,32 @@ public class TimelineController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping
+    public List<Tweet> getMyTimeline(Principal principal) throws Exception {
+        String username = principal.getName();
+        User user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+
+        List<Tweet> tweets = new ArrayList<Tweet>();
+        
+        for (Long userId : user.getFollowing()) {
+            User followingUser = userRepository
+                .findById(userId)
+                .orElse(null);
+            if (followingUser != null) {
+                List<Tweet> userTweets = tweetRepository.findByUser(followingUser);
+                tweets.addAll(userTweets);
+            }
+        } 
+
+        tweets.sort(Comparator
+                .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder()) // could sort by id?
+                );        
+        return tweets;
+    }
 
     // needs pagination
     @GetMapping("/all")
