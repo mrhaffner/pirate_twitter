@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "users", 
     uniqueConstraints = { 
-      @UniqueConstraint(columnNames = "username"),
+      @UniqueConstraint(columnNames = "username"), // does this ignore capitalization?
     })
 public class User {
   
@@ -42,8 +42,8 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   // json ignore?
-  @OneToMany
-  private Set<User> following = new HashSet<>();
+  @ElementCollection
+  private Set<Long> following = new HashSet<>();
 
   public User(String username, String password) {
     this.username = username;

@@ -4,11 +4,9 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.piritter.api.model.User;
 import com.piritter.api.repository.UserRepository;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -33,8 +30,7 @@ public class UserController {
     @PutMapping(value="/{followUsername}/follow")
     public void followUser(Principal principal, @PathVariable String followUsername) throws Exception{
         String currentUsername = principal.getName();
-        System.out.println(currentUsername);
-        System.out.println(followUsername);
+
         User currentUser = userRepository
                         .findByUsername(currentUsername)
                         .orElseThrow(() -> new Exception(("User not found for username: " + currentUsername)));
@@ -43,8 +39,11 @@ public class UserController {
                 .findByUsername(followUsername)
                 .orElseThrow(() -> new Exception(("User not found for username: " + followUsername)));
 
-        if (!currentUsername.equalsIgnoreCase(followUsername)) {
-            currentUser.getFollowing().add(followUser);
+        Long currentUserId = currentUser.getId();
+        Long followUserId = followUser.getId();
+
+        if (currentUserId != followUserId) {
+            currentUser.getFollowing().add(followUserId);
             userRepository.save(currentUser);
         }
     }
@@ -54,8 +53,7 @@ public class UserController {
     @PutMapping(value="/{followUsername}/unfollow")
     public void unfollowUser(Principal principal, @PathVariable String followUsername) throws Exception{
         String currentUsername = principal.getName();
-        System.out.println(currentUsername);
-        System.out.println(followUsername);
+
         User currentUser = userRepository
                         .findByUsername(currentUsername)
                         .orElseThrow(() -> new Exception(("User not found for username: " + currentUsername)));
@@ -64,8 +62,11 @@ public class UserController {
                 .findByUsername(followUsername)
                 .orElseThrow(() -> new Exception(("User not found for username: " + followUsername)));
 
-        if (!currentUsername.equalsIgnoreCase(followUsername)) {
-            currentUser.getFollowing().remove(followUser);
+        Long currentUserId = currentUser.getId();
+        Long followUserId = followUser.getId();
+
+        if (currentUserId != followUserId) {
+            currentUser.getFollowing().remove(followUserId);
             userRepository.save(currentUser);
         }
     }
