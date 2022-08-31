@@ -4,8 +4,11 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +54,25 @@ public class TweetController {
         tweet.setContent(tweetDto.getContent());
         tweetRepository.save(tweet);
         return tweet;
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("/{tweetId}")
+    public ResponseEntity<String> deleteTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
+        String username = principal.getName();
+        Tweet tweet = tweetRepository
+                        .findById(Long.parseLong(tweetId))
+                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
+
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+
+        if (user.getId() == tweet.getUser().getId()) { // or .equals?
+            tweetRepository.deleteById(Long.parseLong(tweetId));
+        }
+
+        // what if not there or not able to delete?
+        return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
 }
