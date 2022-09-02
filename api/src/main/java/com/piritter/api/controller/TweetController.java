@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.piritter.api.model.Tweet;
 import com.piritter.api.model.User;
 import com.piritter.api.payload.request.TweetRequest;
+import com.piritter.api.payload.response.TweetResponse;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
 
@@ -35,17 +36,15 @@ public class TweetController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public Tweet createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
+    public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
         String username = principal.getName();
         User user = userRepository
                         .findByUsername(username)
                         .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-        // refactor into service, maybe with the above too
-        Tweet tweet = new Tweet();
-        tweet.setUser(user);
-        tweet.setContent(tweetDto.getContent());
+
+        Tweet tweet = new Tweet(tweetDto.getContent(), user);
         tweetRepository.save(tweet);
-        return tweet;
+        return new TweetResponse(tweet);
     }
 
     @PreAuthorize("hasRole('USER')")

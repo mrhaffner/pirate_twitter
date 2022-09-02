@@ -14,13 +14,11 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Tweet {
     
@@ -41,4 +39,9 @@ public class Tweet {
     // json ignore?
     @ElementCollection
     private Set<Long> likedByUserId = new HashSet<>();
+    
+    public Tweet(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 }

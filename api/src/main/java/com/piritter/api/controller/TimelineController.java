@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.piritter.api.model.Tweet;
 import com.piritter.api.model.User;
+import com.piritter.api.payload.response.TweetResponse;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
 
@@ -31,7 +32,7 @@ public class TimelineController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping
-    public List<Tweet> getMyTimeline(Principal principal) throws Exception {
+    public List<TweetResponse> getMyTimeline(Principal principal) throws Exception {
         String username = principal.getName();
         User user = userRepository
                 .findByUsername(username)
@@ -49,31 +50,56 @@ public class TimelineController {
             }
         } 
 
-        tweets.sort(Comparator
-                .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder()) // could sort by id?
-                );        
-        return tweets;
+        return tweetsToTweetResponses(tweets, user);
     }
 
     // needs pagination
     @GetMapping("/all")
-    public List<Tweet> getPirateTimeline() {
+    public List<TweetResponse> getPirateTimeline(Principal principal) throws Exception {
         List<Tweet> tweets = tweetRepository.findAll();
-        tweets.sort(Comparator
-                        .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder())
-                        );        
-        return tweets;
+        if (principal == null) {
+            return tweetsToTweetResponses(tweets);
+        }
+        String username = principal.getName();
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+        return tweetsToTweetResponses(tweets, user);
     }
 
     @GetMapping("/{username}")
-    public List<Tweet> getUserTweets(@PathVariable(value = "username") String username) throws Exception {
+    public List<TweetResponse> getUserTweets(Principal principal, 
+                                    @PathVariable(value = "username") String username) throws Exception {
         User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new Exception(("User not found for username: " + username)));
         List<Tweet> tweets = tweetRepository.findByUser(user);
-        tweets.sort(Comparator
-                .comparing(tweet -> tweet.getCreationTime(), Comparator.reverseOrder())
-                );        
-        return tweets;
+
+        if (principal == null) {
+            return tweetsToTweetResponses(tweets);
+        }
+        String loggedUsername = principal.getName();
+        User loggedUser = userRepository
+                        .findByUsername(loggedUsername)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + loggedUsername)));
+        return tweetsToTweetResponses(tweets, loggedUser);
+    }
+
+    private List<TweetResponse> tweetsToTweetResponses(List<Tweet> tweets) {
+        return tweets.stream()
+                     .map(tweet -> new TweetResponse(tweet))
+                     .sorted(Comparator
+                                .comparing(tweet -> tweet.getCreationTime(),
+                                                    Comparator.reverseOrder()))
+                     .toList();
+    }
+
+    private List<TweetResponse> tweetsToTweetResponses(List<Tweet> tweets, User user) {
+        return tweets.stream()
+                     .map(tweet -> new TweetResponse(tweet, user))
+                     .sorted(Comparator
+                                .comparing(tweet -> tweet.getCreationTime(),
+                                                    Comparator.reverseOrder()))
+                     .toList();
     }
 }
