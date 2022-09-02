@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piritter.api.model.Tweet;
-import com.piritter.api.model.TweetDto;
 import com.piritter.api.model.User;
+import com.piritter.api.payload.request.TweetRequest;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
 
@@ -33,7 +35,7 @@ public class TweetController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public Tweet createTweet(Principal principal, @RequestBody TweetDto tweetDto) throws Exception { // should be dto/dao?
+    public Tweet createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
         String username = principal.getName();
         User user = userRepository
                         .findByUsername(username)
@@ -64,5 +66,43 @@ public class TweetController {
 
         // what if not there or not able to delete?
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/{tweetId}/like")
+    public void likeTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
+        String username = principal.getName();
+        Tweet tweet = tweetRepository
+                        .findById(Long.parseLong(tweetId))
+                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
+
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+
+        if (user.getId() != tweet.getUser().getId()) {
+            tweet.getLikedByUserId().add(user.getId());
+            tweetRepository.save(tweet);
+        }
+    }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/{tweetId}/unlike")
+    public void unlikeTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
+        String username = principal.getName();
+        Tweet tweet = tweetRepository
+                        .findById(Long.parseLong(tweetId))
+                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
+
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+
+        if (user.getId() != tweet.getUser().getId()) {
+            tweet.getLikedByUserId().remove(user.getId());
+            tweetRepository.save(tweet);
+        }
     }
 }

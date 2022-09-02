@@ -1,6 +1,6 @@
-package com.piritter.api.model;
+package com.piritter.api.payload.request;
 
-public class TweetDto {
+public class TweetRequest {
     private String content;
 
     public String getContent() {
