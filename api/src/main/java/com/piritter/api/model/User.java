@@ -28,12 +28,12 @@ public class User {
 
   @NotBlank
   @Pattern(regexp = "[a-zA-Z_0-9]+")
-  @Size(max = 15, min = 4)
+  @Size(min = 4, max = 15)
   private String username;
 
   @JsonIgnore
   @NotBlank
-  @Size(max = 120)
+  @Size(min = 6, max = 40)
   private String password;
 
   @JsonIgnore

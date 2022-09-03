@@ -8,7 +8,8 @@ import lombok.Data;
 public class SignupRequest {
   
   @NotBlank
-  @Size(min = 3, max = 20)
+  @Pattern(regexp = "[a-zA-Z_0-9]+")
+  @Size(min = 4, max = 15)
   private String username;
 
   @NotBlank
