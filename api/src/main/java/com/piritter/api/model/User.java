@@ -45,8 +45,14 @@ public class User {
   @ElementCollection
   private Set<Long> following = new HashSet<>();
 
+  @JsonIgnore
+  @OneToMany
+  private Set<Tweet> retweets = new HashSet<>();
+
   public User(String username, String password) {
     this.username = username;
     this.password = password;
   }
+
+  // add a .equals
 }

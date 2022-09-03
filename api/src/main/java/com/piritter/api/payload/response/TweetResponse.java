@@ -15,6 +15,7 @@ public class TweetResponse {
     private User user; // do I need following?
     private boolean likedByMe;
     private int likeCount;
+    private int retweetCount;
 
     public TweetResponse(Tweet tweet) {
         id = tweet.getId();
@@ -22,6 +23,7 @@ public class TweetResponse {
         content = tweet.getContent();
         user = tweet.getUser();
         likeCount = tweet.getLikedByUserId().size();
+        retweetCount = tweet.getRetweetCount();
         likedByMe = false;
     }
 

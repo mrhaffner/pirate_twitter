@@ -3,7 +3,9 @@ package com.piritter.api.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,7 +40,7 @@ public class TimelineController {
                 .findByUsername(username)
                 .orElseThrow(() -> new Exception(("User not found for username: " + username)));
 
-        List<Tweet> tweets = new ArrayList<Tweet>();
+        Set<Tweet> tweets = new HashSet<>();
         
         for (Long userId : user.getFollowing()) {
             User followingUser = userRepository
@@ -47,10 +49,15 @@ public class TimelineController {
             if (followingUser != null) {
                 List<Tweet> userTweets = tweetRepository.findByUser(followingUser);
                 tweets.addAll(userTweets);
+                for (Tweet retweet : followingUser.getRetweets()) {
+                    if (retweet.getUser().getId() != user.getId()) {
+                        tweets.add(retweet);
+                    }
+                }
             }
         } 
 
-        return tweetsToTweetResponses(tweets, user);
+        return tweetsToTweetResponses(new ArrayList<Tweet>(tweets), user);
     }
 
     // needs pagination
@@ -74,6 +81,7 @@ public class TimelineController {
                 .findByUsername(username)
                 .orElseThrow(() -> new Exception(("User not found for username: " + username)));
         List<Tweet> tweets = tweetRepository.findByUser(user);
+        tweets.addAll(user.getRetweets()); // add retweets
 
         if (principal == null) {
             return tweetsToTweetResponses(tweets);
@@ -89,7 +97,7 @@ public class TimelineController {
         return tweets.stream()
                      .map(tweet -> new TweetResponse(tweet))
                      .sorted(Comparator
-                                .comparing(tweet -> tweet.getCreationTime(),
+                                .comparing(tweet -> tweet.getCreationTime(), // sort by id is faster
                                                     Comparator.reverseOrder()))
                      .toList();
     }

@@ -104,4 +104,27 @@ public class TweetController {
             tweetRepository.save(tweet);
         }
     }
+
+    @ResponseStatus(code = HttpStatus.OK)
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/{tweetId}/retweet")
+    public void retweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
+        String username = principal.getName();
+        Tweet tweet = tweetRepository
+                        .findById(Long.parseLong(tweetId))
+                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
+
+        User user = userRepository
+                        .findByUsername(username)
+                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
+
+        // a user may not retweet their own tweet
+        if (user.getId() != tweet.getUser().getId()) {
+            // this represents tight coupling, a many to many retweet class could fix this + seperate timeline classes
+            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+            tweetRepository.save(tweet);
+            user.getRetweets().add(tweet);
+            userRepository.save(user);
+        }
+    }
 }

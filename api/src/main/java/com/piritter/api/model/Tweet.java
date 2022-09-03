@@ -14,10 +14,12 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class Tweet {
@@ -39,9 +41,20 @@ public class Tweet {
     // json ignore?
     @ElementCollection
     private Set<Long> likedByUserId = new HashSet<>();
+
+    private int retweetCount = 0;
     
     public Tweet(String content, User user) {
         this.content = content;
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Tweet) {
+            Tweet otherTweet = (Tweet) object;
+            return id == otherTweet.getId();
+        }
+        return false;
     }
 }
