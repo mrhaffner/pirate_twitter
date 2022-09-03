@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,6 +27,7 @@ public class User {
   private Long id;
 
   @NotBlank
+  @Pattern(regexp = "[a-zA-Z_0-9]+")
   @Size(max = 15, min = 4)
   private String username;
 
