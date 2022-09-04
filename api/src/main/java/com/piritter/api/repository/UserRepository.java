@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Boolean existsByUsername(String username);
 
+  // is this escaped to prevent sql injection?
   @Query("select u from User u where lower(u.username) like lower(concat(:nameToFind,'%'))")
   List<User> findAllUsernamesLike(@Param("nameToFind") String username);
 }

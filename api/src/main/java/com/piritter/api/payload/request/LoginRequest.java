@@ -2,9 +2,9 @@ package com.piritter.api.payload.request;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class LoginRequest {
 
 	@NotBlank
@@ -12,4 +12,9 @@ public class LoginRequest {
 
 	@NotBlank
 	private String password;
+
+	public LoginRequest(String username, String password) {
+		this.username = username.toLowerCase();
+		this.password = password;
+  }
 }
