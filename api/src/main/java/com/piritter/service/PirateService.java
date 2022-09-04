@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import org.springframework.util.ResourceUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -32,16 +31,27 @@ public class PirateService {
         // how to handle periods/commas?
         List<String> splitPhrase = Arrays.asList(englishPhrase.split(" "));
         splitPhrase = splitPhrase.stream()
-                                 .map(word -> word.toLowerCase())
-                                 .map(word -> word.replace("ing", "in'"))
-                                 .map(word -> translateTable.containsKey(word) ? 
-                                                translateTable.get(word) :
-                                                word)
+                                 .map(word -> translateWord(word))
                                  .toList();
         String translatedPhrase = String.join(" ", splitPhrase);
         // check length, if short enough add begginning/ending phrase
         // max length for tweet???
         return translatedPhrase;
+    }
+
+    private String translateWord(String word) {
+        String translatedWord = word.toLowerCase()
+                                    .replace("ing", "in'");
+        translatedWord = translateTable.containsKey(translatedWord) ? 
+                                                translateTable.get(translatedWord) :
+                                                translatedWord;
+        if (Character.isUpperCase(word.charAt(0))) {
+            char fistChar = translatedWord.charAt(0);
+            translatedWord = translatedWord.replaceFirst(String.valueOf(fistChar), 
+                                                            String.valueOf(fistChar)
+                                                                  .toUpperCase());
+        }
+        return translatedWord;
     }
 }
 
