@@ -33,7 +33,7 @@ public class User {
 
   @JsonIgnore
   @NotBlank
-  @Size(min = 6, max = 40)
+  @Size(max = 120)
   private String password;
 
   @JsonIgnore
