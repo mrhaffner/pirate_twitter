@@ -22,6 +22,7 @@ import com.piritter.api.payload.request.TweetRequest;
 import com.piritter.api.payload.response.TweetResponse;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
+import com.piritter.service.PirateService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -34,6 +35,8 @@ public class TweetController {
     @Autowired
     private TweetRepository tweetRepository;
 
+    private PirateService pirateService = new PirateService(); // or AutoWired but make it a Bean?
+
     @PreAuthorize("hasRole('USER')")
     @PostMapping
     public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
@@ -42,7 +45,9 @@ public class TweetController {
                         .findByUsername(username)
                         .orElseThrow(() -> new Exception(("User not found for username: " + username)));
 
-        Tweet tweet = new Tweet(tweetDto.getContent(), user);
+        String translatedTweet = pirateService.translate(tweetDto.getContent());
+        Tweet tweet = new Tweet(translatedTweet, user);
+        // Tweet tweet = new Tweet(tweetDto.getContent(), user);
         tweetRepository.save(tweet);
         return new TweetResponse(tweet);
     }
