@@ -1,6 +1,7 @@
 package com.piritter.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,18 +26,15 @@ public class PirateService {
         }
     }
     
-    public String translate(String englishPhrase) {
-        // lower case comparison then readjust capital
-        // or capitalize first letter of every sentence
+    public String translate(String text) {
         // how to handle periods/commas?
-        List<String> splitPhrase = Arrays.asList(englishPhrase.split(" "));
-        splitPhrase = splitPhrase.stream()
-                                 .map(word -> translateWord(word))
-                                 .toList();
-        String translatedPhrase = String.join(" ", splitPhrase);
+        List<String> splitPhrase = splitText(text);
+        return splitPhrase.stream()
+                          .map(word -> translateWord(word))
+                          .reduce("", (word1, word2) -> combineWords(word1, word2));
         // check length, if short enough add begginning/ending phrase
         // max length for tweet???
-        return translatedPhrase;
+        // return translatedPhrase;
     }
 
     private String translateWord(String word) {
@@ -52,6 +50,41 @@ public class PirateService {
                                                                   .toUpperCase());
         }
         return translatedWord;
+    }
+
+    private List<String> splitText(String text) {
+        List<String> splitPhrase = new ArrayList<>();
+        for (String word : Arrays.asList(text.split(" "))) {
+            String lastChar = String.valueOf(word.charAt(word.length() - 1));
+            if (word.length() <= 1) {
+                splitPhrase.add(word);
+            } else if (lastChar.contentEquals(".") || lastChar.contentEquals("?") || 
+                        lastChar.contentEquals("!") || lastChar.contentEquals(",")) {
+                splitPhrase.add(word.substring(0, word.length() - 1));
+                splitPhrase.add(lastChar);
+            } else {
+                splitPhrase.add(word);
+            }
+        }
+        return splitPhrase;
+    }
+
+    private String combineWords(String word1, String word2) {
+        if (word1.equals("")) {
+            return word2;
+        }
+        switch (word2) {
+            case ",":
+                return word1 + word2;
+            case ".":
+                return word1 + word2;
+            case "!":
+                return word1 + word2;
+            case "?":
+                return word1 + word2;
+            default:
+                return word1 + " " + word2;
+        }
     }
 }
 
