@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.util.ResourceUtils;
 
@@ -14,7 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PirateService {
 
-    Map<String, String> translateTable;   
+    Map<String, String> translateTable;
+    String[] prefixes = {"Yo ho ho.", "Arrrr.", "Blimey!", "Shiver me timbers."};
+    String[] postfixes = {"Savvy?", "Ya scurvy dog!"};   
 
     public PirateService()  {
         try { // or should we throw it?
@@ -27,10 +30,12 @@ public class PirateService {
     }
     
     public String translate(String text) {
+        String outputText;
         List<String> splitPhrase = splitText(text);
-        return splitPhrase.stream()
-                          .map(word -> translateWord(word))
-                          .reduce("", (word1, word2) -> combineWords(word1, word2));
+        outputText = splitPhrase.stream()
+                                .map(word -> translateWord(word))
+                                .reduce("", (word1, word2) -> combineWords(word1, word2));
+        return addRandomSaying(outputText);
         // check length, if short enough add begginning/ending phrase
         // max length for tweet???
         // return translatedPhrase;
@@ -94,23 +99,33 @@ public class PirateService {
         return word.replaceFirst(String.valueOf(fistChar), String.valueOf(fistChar)
                                                                  .toUpperCase());
     }
+
+    private String addRandomSaying(String text) {
+        int addPhrase = ThreadLocalRandom.current().nextInt(0, 5);
+        if (text.length() > 260 || addPhrase > 1) {
+            return text;
+        }
+        int prefixOrPostfix = ThreadLocalRandom.current().nextInt(0, 2);
+        if (prefixOrPostfix == 0) {
+            int prefixIndex = ThreadLocalRandom.current().nextInt(0, prefixes.length);
+            return prefixes[prefixIndex] + " " + text;
+        } else {
+            int postfixIndex = ThreadLocalRandom.current().nextInt(0, postfixes.length);
+            return text + " " + postfixes[postfixIndex] ;
+        }
+    }
 }
 
-// ing: 'in'
 // add "arr" randomly or when text allows
 //   blimey
 // HANDSOMELY
 // ho
-// SHIVER ME TIMBERS!
 // scurvy dog
 // dear
 // treasure
 // booty
 // buccaneer
 // landlubber
-// blimey
-// end with savvy?
-// yo ho ho
 // scallywag
 // maiden instead of wench
 // beer
