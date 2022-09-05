@@ -27,7 +27,6 @@ public class PirateService {
     }
     
     public String translate(String text) {
-        // how to handle periods/commas?
         List<String> splitPhrase = splitText(text);
         return splitPhrase.stream()
                           .map(word -> translateWord(word))
@@ -43,12 +42,6 @@ public class PirateService {
         translatedWord = translateTable.containsKey(translatedWord) ? 
                                                 translateTable.get(translatedWord) :
                                                 translatedWord;
-        if (Character.isUpperCase(word.charAt(0))) {
-            char fistChar = translatedWord.charAt(0);
-            translatedWord = translatedWord.replaceFirst(String.valueOf(fistChar), 
-                                                            String.valueOf(fistChar)
-                                                                  .toUpperCase());
-        }
         return translatedWord;
     }
 
@@ -70,8 +63,17 @@ public class PirateService {
     }
 
     private String combineWords(String word1, String word2) {
-        if (word1.equals("")) {
-            return word2;
+        switch (word1) {
+            case "":
+                return capitalizeFirstChar(word2);
+            case ".":
+                return word1 + " " + capitalizeFirstChar(word2);
+            case "!":
+                return word1 + " " + capitalizeFirstChar(word2);
+            case "?":
+                return word1 + " " + capitalizeFirstChar(word2);
+            default:
+                break;
         }
         switch (word2) {
             case ",":
@@ -85,6 +87,12 @@ public class PirateService {
             default:
                 return word1 + " " + word2;
         }
+    }
+
+    private String capitalizeFirstChar(String word) {
+        char fistChar = word.charAt(0);
+        return word.replaceFirst(String.valueOf(fistChar), String.valueOf(fistChar)
+                                                                 .toUpperCase());
     }
 }
 
