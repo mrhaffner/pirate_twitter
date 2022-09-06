@@ -13,6 +13,8 @@ import org.springframework.util.ResourceUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
+//@ service?
 public class PirateService {
 
     Map<String, String> translateTable;
