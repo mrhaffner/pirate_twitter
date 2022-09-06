@@ -1,4 +1,4 @@
-package com.piritter.service;
+package com.piritter.api.service;
 
 import java.io.File;
 import java.util.ArrayList;

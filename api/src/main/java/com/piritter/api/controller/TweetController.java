@@ -22,7 +22,7 @@ import com.piritter.api.payload.request.TweetRequest;
 import com.piritter.api.payload.response.TweetResponse;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
-import com.piritter.service.PirateService;
+import com.piritter.api.service.PirateService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
