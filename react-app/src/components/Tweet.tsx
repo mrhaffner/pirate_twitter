@@ -1,10 +1,10 @@
-import Tweet from '../types/Tweet';
+import TweetData from '../types/TweetData';
 import Avatar from './Avatar';
 import LikeButton from './LikeButton';
 import RetweetButton from './RetweetButton';
 
 interface Props {
-  tweet: Tweet;
+  tweet: TweetData;
 }
 
 const Tweet = ({ tweet }: Props) => {
@@ -17,7 +17,9 @@ const Tweet = ({ tweet }: Props) => {
       </div>
       <div>
         <div>
-          <div>@{user.handle}</div>
+          <a href="#">
+            <span>@{user.handle}</span>
+          </a>
           <div>{datetime}</div>
         </div>
         <div>

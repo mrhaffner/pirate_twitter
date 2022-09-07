@@ -1,7 +1,7 @@
-import Tweet from '../types/Tweet';
+import TweetData from '../types/TweetData';
 
 interface Props {
-  tweet: Tweet;
+  tweet: TweetData;
 }
 
 const LikeButton = ({ tweet }: Props) => {
