@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "content": "this is a pirate tweet 1",
+    "likeCount": 10,
+    "datetime": "may 4",
+    "user": {
+      "id": 1,
+      "handle": "stevesie",
+      "following": [2]
+    }
+  },
+  {
+    "id": 2,
+    "content": "this is a pirate tweet 2",
+    "likeCount": 10,
+    "datetime": "may 4",
+    "user": {
+      "id": 2,
+      "handle": "bob",
+      "following": []
+    }
+  }
+]
