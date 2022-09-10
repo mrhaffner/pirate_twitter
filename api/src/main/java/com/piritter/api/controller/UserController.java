@@ -53,8 +53,8 @@ public class UserController {
         return user;
     }
 
-    @GetMapping(value="/search")
-    public List<User> searchForUsernames(@RequestParam String username) throws Exception{
+    @GetMapping(value="/find-similar/{username}")
+    public List<User> searchForUsernames(@PathVariable String username) throws Exception{
         return userService.findAllUsernamesLike(username);
     }
 }
