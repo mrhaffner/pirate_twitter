@@ -16,59 +16,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.piritter.api.model.Tweet;
-import com.piritter.api.model.User;
 import com.piritter.api.payload.request.TweetRequest;
 import com.piritter.api.payload.response.TweetResponse;
-import com.piritter.api.repository.TweetRepository;
-import com.piritter.api.repository.UserRepository;
-import com.piritter.api.service.PirateService;
+import com.piritter.api.service.TweetService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/tweet")
 public class TweetController {
-    
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
-    private TweetRepository tweetRepository;
-
-    @Autowired
-    private PirateService pirateService;
+    private TweetService tweetService;
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
     public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
         String username = principal.getName();
-        User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-
-        String translatedTweet = pirateService.translate(tweetDto.getContent());
-        Tweet tweet = new Tweet(translatedTweet, user);
-        tweetRepository.save(tweet);
-        return new TweetResponse(tweet);
+        return tweetService.saveNewTweet(tweetDto, username);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{tweetId}")
     public ResponseEntity<String> deleteTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
         String username = principal.getName();
-        Tweet tweet = tweetRepository
-                        .findById(Long.parseLong(tweetId))
-                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
-
-        User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-
-        if (user.getId() == tweet.getUser().getId()) { // or .equals?
-            tweetRepository.deleteById(Long.parseLong(tweetId));
-        }
-
-        // what if not there or not able to delete?
+        tweetService.deleteUserTweet(tweetId, username);
         return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
 
@@ -77,18 +48,7 @@ public class TweetController {
     @PutMapping("/{tweetId}/like")
     public void likeTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
         String username = principal.getName();
-        Tweet tweet = tweetRepository
-                        .findById(Long.parseLong(tweetId))
-                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
-
-        User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-
-        if (user.getId() != tweet.getUser().getId()) {
-            tweet.getLikedByUserId().add(user.getId());
-            tweetRepository.save(tweet);
-        }
+        tweetService.likeTweet(tweetId, username);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -96,18 +56,7 @@ public class TweetController {
     @PutMapping("/{tweetId}/unlike")
     public void unlikeTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
         String username = principal.getName();
-        Tweet tweet = tweetRepository
-                        .findById(Long.parseLong(tweetId))
-                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
-
-        User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-
-        if (user.getId() != tweet.getUser().getId()) {
-            tweet.getLikedByUserId().remove(user.getId());
-            tweetRepository.save(tweet);
-        }
+        tweetService.unlikeTweet(tweetId, username);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -115,21 +64,6 @@ public class TweetController {
     @PutMapping("/{tweetId}/retweet")
     public void retweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
         String username = principal.getName();
-        Tweet tweet = tweetRepository
-                        .findById(Long.parseLong(tweetId))
-                        .orElseThrow(() -> new Exception("Tweet not found for tweetId: " + tweetId));  // or return some http status?
-
-        User user = userRepository
-                        .findByUsername(username)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + username)));
-
-        // a user may not retweet their own tweet
-        if (user.getId() != tweet.getUser().getId()) {
-            // this represents tight coupling, a many to many retweet class could fix this + seperate timeline classes
-            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-            tweetRepository.save(tweet);
-            user.getRetweets().add(tweet);
-            userRepository.save(user);
-        }
+        tweetService.retweet(tweetId, username);
     }
 }
