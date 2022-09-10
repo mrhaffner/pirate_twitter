@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piritter.api.model.User;
-import com.piritter.api.repository.UserRepository;
+import com.piritter.api.service.UserService;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,58 +26,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UserController {
     
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(code = HttpStatus.OK)
     @PutMapping(value="/{followUsername}/follow")
     public void followUser(Principal principal, @PathVariable String followUsername) throws Exception{
         String currentUsername = principal.getName();
-
-        User currentUser = userRepository
-                        .findByUsername(currentUsername)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + currentUsername)));
-
-        User followUser = userRepository
-                .findByUsername(followUsername)
-                .orElseThrow(() -> new Exception(("User not found for username: " + followUsername)));
-
-        Long currentUserId = currentUser.getId();
-        Long followUserId = followUser.getId();
-
-        if (currentUserId != followUserId) {
-            currentUser.getFollowing().add(followUserId);
-            userRepository.save(currentUser);
-        }
+        userService.followUser(currentUsername, followUsername);
     }
 
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(code = HttpStatus.OK)
     @PutMapping(value="/{followUsername}/unfollow")
-    public void unfollowUser(Principal principal, @PathVariable String followUsername) throws Exception{
+    public void unfollowUser(Principal principal, @PathVariable String unfollowUsername) throws Exception{
         String currentUsername = principal.getName();
-
-        User currentUser = userRepository
-                        .findByUsername(currentUsername)
-                        .orElseThrow(() -> new Exception(("User not found for username: " + currentUsername)));
-
-        User followUser = userRepository
-                .findByUsername(followUsername)
-                .orElseThrow(() -> new Exception(("User not found for username: " + followUsername)));
-
-        Long currentUserId = currentUser.getId();
-        Long followUserId = followUser.getId();
-
-        if (currentUserId != followUserId) {
-            currentUser.getFollowing().remove(followUserId);
-            userRepository.save(currentUser);
-        }
+        userService.unfollowUser(currentUsername, unfollowUsername);
     }
 
     // for testing?
     @GetMapping(value="/{username}")
     public User getUser(@PathVariable String username) throws Exception{
-        User user = userRepository
+        User user = userService
                         .findByUsername(username)
                         .orElseThrow(() -> new Exception(("User not found for username: " + username)));
         return user;
@@ -84,7 +55,6 @@ public class UserController {
 
     @GetMapping(value="/search")
     public List<User> searchForUsernames(@RequestParam String username) throws Exception{
-        List<User> users = userRepository.findAllUsernamesLike(username);
-        return users;
+        return userService.findAllUsernamesLike(username);
     }
 }
