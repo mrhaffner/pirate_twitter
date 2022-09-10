@@ -32,6 +32,7 @@ public class PirateServiceImpl implements PirateService {
         }
     }
     
+    @Override
     public String translate(String text) {
         String outputText;
         List<String> splitPhrase = splitText(text);
