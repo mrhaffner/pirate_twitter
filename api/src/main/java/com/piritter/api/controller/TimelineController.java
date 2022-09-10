@@ -48,6 +48,4 @@ public class TimelineController {
             return timelineService.getUserTimeline(username, principal.getName());
         }
     }
-
-
 }
