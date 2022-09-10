@@ -35,7 +35,8 @@ public class TweetController {
     @Autowired
     private TweetRepository tweetRepository;
 
-    private PirateService pirateService = new PirateService(); // or AutoWired but make it a Bean?
+    @Autowired
+    private PirateService pirateService;
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
@@ -47,7 +48,6 @@ public class TweetController {
 
         String translatedTweet = pirateService.translate(tweetDto.getContent());
         Tweet tweet = new Tweet(translatedTweet, user);
-        // Tweet tweet = new Tweet(tweetDto.getContent(), user);
         tweetRepository.save(tweet);
         return new TweetResponse(tweet);
     }
