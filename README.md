@@ -23,8 +23,7 @@ A pirate themed Twitter clone where all tweets are translated into pirate speak.
 - Handles basic CRUD operations related to Users and Tweets
 - Translates new Tweets to pirate speak
 - Generates Timelines
-- A React web app
-- Serves as the user interface
+- A React web app serves as the user interface
 
 ### Acknowledgements
 
