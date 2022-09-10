@@ -31,17 +31,27 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(code = HttpStatus.OK)
     @PutMapping(value="/{followUsername}/follow")
-    public void followUser(Principal principal, @PathVariable String followUsername) throws Exception {
+    public void followUser(Principal principal, @PathVariable String followUsername) throws ResponseStatusException {
         String currentUsername = principal.getName();
-        userService.followUser(currentUsername, followUsername);
+        try {
+            userService.followUser(currentUsername, followUsername);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                                                "User not found for username: " + followUsername);
+        }
     }
 
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(code = HttpStatus.OK)
-    @PutMapping(value="/{followUsername}/unfollow")
-    public void unfollowUser(Principal principal, @PathVariable String unfollowUsername) throws Exception {
+    @PutMapping(value="/{unfollowUsername}/unfollow")
+    public void unfollowUser(Principal principal, @PathVariable String unfollowUsername) throws ResponseStatusException {
         String currentUsername = principal.getName();
-        userService.unfollowUser(currentUsername, unfollowUsername);
+        try {
+            userService.unfollowUser(currentUsername, unfollowUsername);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                                                "User not found for username: " + unfollowUsername);
+        }
     }
 
     @GetMapping(value="/{username}")

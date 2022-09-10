@@ -3,6 +3,7 @@ package com.piritter.api.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,7 +18,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.piritter.api.model.User;
 import com.piritter.api.service.UserService;
@@ -54,7 +59,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void voidTestGetValidUsername() throws Exception {
+    public void testGetValidUsername() throws Exception {
         Mockito.when(userService.findByUsername("bob"))
               .thenReturn(Optional.of(bob));
 
@@ -66,13 +71,67 @@ public class UserControllerTests {
     }
 
     @Test
-    public void voidTestGetInvalidUsername() throws Exception {
+    public void testGetInvalidUsername() throws Exception {
         Mockito.when(userService.findByUsername("steve"))
               .thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/user/seteve")
+        mockMvc.perform(get("/api/user/steve")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
         Mockito.reset(userService);
+    }
+
+    @Test
+    public void testCannotUnfollowIfNotLoggedIn() throws Exception {
+        mockMvc.perform(put("/api/user/bob/unfollow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(authorities="ROLE_USER", username="steve")
+    public void testUnfollowValidUser() throws Exception {
+        Mockito.doNothing().when(userService).unfollowUser("steve", "bob");
+        mockMvc.perform(put("/api/user/bob/unfollow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser(authorities="ROLE_USER", username="steve")
+    public void testUnfollowInvalidUser() throws Exception {
+        Mockito.doThrow(new Exception()).when(userService).unfollowUser("steve", "bob");
+        mockMvc.perform(put("/api/user/bob/unfollow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testCannotFollowIfNotLoggedIn() throws Exception {
+        mockMvc.perform(put("/api/user/bob/follow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(authorities="ROLE_USER", username="steve")
+    public void testFollowValidUser() throws Exception {
+        Mockito.doNothing().when(userService).unfollowUser("steve", "bob");
+        mockMvc.perform(put("/api/user/bob/follow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser(authorities="ROLE_USER", username="steve")
+    public void testFollowInvalidUser() throws Exception {
+        Mockito.doThrow(new Exception()).when(userService).followUser("steve", "bob");
+        mockMvc.perform(put("/api/user/bob/follow")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+
     }
 }
