@@ -13,7 +13,8 @@ public class TweetResponse {
     private Date creationTime;
     private String content;
     private User user; // do I need following?
-    private boolean likedByMe;
+    private boolean likedByMe = false;
+    private boolean retweetedByMe = false;
     private int likeCount;
     private int retweetCount;
 
@@ -24,13 +25,15 @@ public class TweetResponse {
         user = tweet.getUser();
         likeCount = tweet.getLikedByUserId().size();
         retweetCount = tweet.getRetweetCount();
-        likedByMe = false;
     }
 
     public TweetResponse(Tweet tweet, User user) {
         this(tweet);
         if (tweet.getLikedByUserId().contains(user.getId())) {
             likedByMe = true;
+        }
+        if (user.getRetweets().contains(tweet)) {
+            retweetedByMe = true;
         }
     }
 }
