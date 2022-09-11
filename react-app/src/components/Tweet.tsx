@@ -10,7 +10,7 @@ interface Props {
 const Tweet = ({ tweet }: Props) => {
   const { id, datetime, content, user, likeCount, retweetCount } = tweet;
   // needs to generate updated datetime
-  // truncate counts past 100?
+  // update icons if liked or retweeted by me!!!
   return (
     <div className="border border-black no-overlap flex">
       <div className="m-2">
