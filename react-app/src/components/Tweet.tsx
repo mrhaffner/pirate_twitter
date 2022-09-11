@@ -8,8 +8,9 @@ interface Props {
 }
 
 const Tweet = ({ tweet }: Props) => {
-  const { id, datetime, content, user } = tweet;
+  const { id, datetime, content, user, likeCount, retweetCount } = tweet;
   // needs to generate updated datetime
+  // truncate counts past 100?
   return (
     <div className="border border-black no-overlap flex">
       <div className="m-2">
@@ -26,11 +27,17 @@ const Tweet = ({ tweet }: Props) => {
         <div>
           <div>{content}</div>
           <div className="flex mt-2">
-            <div className="w-36">
-              <RetweetButton tweetId={id} />
+            <div className="flex w-36 space-x-1">
+              <div className="flex items-center">
+                <RetweetButton tweetId={id} />
+              </div>
+              <div>{retweetCount}</div>
             </div>
-            <div>
-              <LikeButton tweet={tweet} />
+            <div className="flex space-x-1">
+              <div className="flex items-center">
+                <LikeButton tweet={tweet} />
+              </div>
+              <div>{likeCount}</div>
             </div>
           </div>
         </div>

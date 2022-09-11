@@ -3,6 +3,7 @@
     "id": 1,
     "content": "this is a pirate tweet 1",
     "likeCount": 10,
+    "retweetCount": 20,
     "datetime": "may 4",
     "user": {
       "id": 1,
@@ -14,6 +15,7 @@
     "id": 2,
     "content": "this is a pirate tweet 2",
     "likeCount": 10,
+    "retweetCount": 0,
     "datetime": "may 4",
     "user": {
       "id": 2,
