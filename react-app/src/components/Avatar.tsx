@@ -4,7 +4,7 @@ interface Props {
 
 const Avatar = ({ seed }: Props) => {
   // generate random avatar based on mod seed
-  return <img />;
+  return <div className="h-10 w-10 bg-black rounded-full "></div>;
 };
 
 export default Avatar;
