@@ -1,14 +1,17 @@
+import { ReactElement } from 'react';
+
 interface Props {
   name: string;
   link: string;
+  children: JSX.Element;
 }
 
-const NavItem = ({ name, link }: Props) => {
+const NavItem = ({ name, link, children }: Props) => {
   return (
     <div>
       <a href={link} className="flex space-x-6">
-        <div>logo</div>
-        <span>{name}</span>
+        {children}
+        <span className="my-auto">{name}</span>
       </a>
     </div>
   );

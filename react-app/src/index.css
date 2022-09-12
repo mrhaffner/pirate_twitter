@@ -25,3 +25,7 @@ code {
 .no-overlap + .no-overlap {
   border-top: none;
 }
+
+.nav-logo {
+  height: 2rem;
+}

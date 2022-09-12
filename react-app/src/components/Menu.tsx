@@ -1,3 +1,5 @@
+import PirateMap from '../svg/PirateMap';
+import PirateShip from '../svg/PirateShip';
 import NavItem from './NavItem';
 import TweetButton from './TweetButton';
 import UserButton from './UserButton';
@@ -9,8 +11,12 @@ const Menu = () => {
         <div>
           <p>tweet logo</p>
         </div>
-        <NavItem name={'Home'} link={''} />
-        <NavItem name={'Explore'} link={''} />
+        <NavItem name={'Home'} link={''}>
+          <PirateShip />
+        </NavItem>
+        <NavItem name={'Explore'} link={''}>
+          <PirateMap />
+        </NavItem>
         <TweetButton />
       </div>
       <div>
