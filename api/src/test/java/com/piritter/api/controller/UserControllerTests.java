@@ -11,7 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,6 +29,7 @@ import com.piritter.api.service.UserService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTests {
 
     User bob;
@@ -36,8 +40,14 @@ public class UserControllerTests {
     @MockBean
     private UserService userService;
 
-    public UserControllerTests() {
+    @BeforeAll
+    public void setup() {
         bob = new User("bob", "adfasdfas");
+    }
+
+    @AfterAll
+    public void tearDown() {
+        Mockito.reset(userService);
     }
 
     @Test
@@ -52,7 +62,6 @@ public class UserControllerTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)))
             .andExpect(jsonPath("$[0].username", is(bob.getUsername())));
-        Mockito.reset(userService);
     }
 
     @Test
@@ -64,7 +73,6 @@ public class UserControllerTests {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.username", is(bob.getUsername())));
-        Mockito.reset(userService);
     }
 
     @Test
@@ -75,7 +83,6 @@ public class UserControllerTests {
         mockMvc.perform(get("/api/user/steve")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
-        Mockito.reset(userService);
     }
 
     @Test
@@ -92,7 +99,6 @@ public class UserControllerTests {
         mockMvc.perform(put("/api/user/bob/unfollow")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
-
     }
 
     @Test
@@ -102,7 +108,6 @@ public class UserControllerTests {
         mockMvc.perform(put("/api/user/bob/unfollow")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -119,7 +124,6 @@ public class UserControllerTests {
         mockMvc.perform(put("/api/user/bob/follow")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
-
     }
 
     @Test
@@ -129,6 +133,5 @@ public class UserControllerTests {
         mockMvc.perform(put("/api/user/bob/follow")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
-
     }
 }

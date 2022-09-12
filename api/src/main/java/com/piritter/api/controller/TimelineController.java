@@ -39,7 +39,7 @@ public class TimelineController {
         }
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/user/{username}")
     public List<TweetResponse> getUserTweets(Principal principal, 
                                     @PathVariable(value = "username") String username) throws Exception {
         if (principal == null) {
