@@ -1,3 +1,4 @@
+import Dots from '../svg/Dots';
 import Avatar from './Avatar';
 
 const UserButton = () => {
@@ -11,7 +12,7 @@ const UserButton = () => {
         <div>@username</div>
       </div>
       <div className="my-auto">
-        <div>dots</div>
+        <Dots />
       </div>
     </button>
   );
