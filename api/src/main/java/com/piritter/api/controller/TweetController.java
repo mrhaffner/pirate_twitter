@@ -30,17 +30,17 @@ public class TweetController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception { // should be dto/dao?
+    public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception {
         String username = principal.getName();
         return tweetService.saveNewTweet(tweetDto, username);
     }
 
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{tweetId}")
-    public ResponseEntity<String> deleteTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
+    public void deleteTweet(Principal principal, @PathVariable(value = "tweetId") String tweetId) throws Exception {
         String username = principal.getName();
         tweetService.deleteUserTweet(tweetId, username);
-        return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
