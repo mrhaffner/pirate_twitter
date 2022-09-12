@@ -6,9 +6,11 @@ import tweetData from '../tweet_data.json';
 const SideBar = () => {
   const userSuggestions = tweetData.map((tweet) => tweet.user);
   return (
-    <div>
+    <div className="mt-4 ml-8 space-y-4">
       <SearchBar />
-      <SearchDropDown users={userSuggestions} />
+      <div className="hidden">
+        <SearchDropDown users={userSuggestions} />
+      </div>
       <FollowerSuggestions users={userSuggestions} />
     </div>
   );

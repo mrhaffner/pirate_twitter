@@ -7,7 +7,7 @@ interface Props {
 
 const SearchSuggestion = ({ user }: Props) => {
   return (
-    <a href="">
+    <a href="#">
       <Avatar seed={user.id} />
       <div>
         <p>@{user.handle}</p>

@@ -7,12 +7,14 @@ interface Props {
 
 const FollowerSuggestion = ({ user }: Props) => {
   return (
-    <div>
-      <div>
-        <Avatar seed={user.id} />
-      </div>
-      <div>
-        <p>@{user.handle}</p>
+    <div className="flex justify-between">
+      <div className="flex space-x-2">
+        <div>
+          <Avatar seed={user.id} />
+        </div>
+        <div>
+          <p>@{user.handle}</p>
+        </div>
       </div>
       <button>Follow</button>
     </div>
