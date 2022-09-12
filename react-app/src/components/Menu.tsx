@@ -4,9 +4,11 @@ import UserButton from './UserButton';
 
 const Menu = () => {
   return (
-    <div>
-      <div>
-        <div>logo</div>
+    <nav className="w-88 py-4 pl-24 flex flex-col justify-between">
+      <div className="space-y-8">
+        <div>
+          <p>tweet logo</p>
+        </div>
         <NavItem name={'Home'} link={''} />
         <NavItem name={'Explore'} link={''} />
         <TweetButton />
@@ -14,7 +16,7 @@ const Menu = () => {
       <div>
         <UserButton />
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -7,7 +7,7 @@ interface Props {
 
 const Feed = ({ tweets }: Props) => {
   return (
-    <div>
+    <div className="w-152">
       {tweets.map((tweet) => (
         <Tweet tweet={tweet} />
       ))}

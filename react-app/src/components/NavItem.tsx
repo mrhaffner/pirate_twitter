@@ -5,10 +5,12 @@ interface Props {
 
 const NavItem = ({ name, link }: Props) => {
   return (
-    <a href={link}>
-      <div>logo</div>
-      <span>{name}</span>
-    </a>
+    <div>
+      <a href={link} className="flex space-x-6">
+        <div>logo</div>
+        <span>{name}</span>
+      </a>
+    </div>
   );
 };
 
