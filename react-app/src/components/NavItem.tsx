@@ -8,7 +8,7 @@ interface Props {
 
 const NavItem = ({ name, link, children }: Props) => {
   return (
-    <div>
+    <div className="p-4 rounded-full hover:bg-gray-400">
       <a href={link} className="flex space-x-6">
         {children}
         <span className="my-auto">{name}</span>

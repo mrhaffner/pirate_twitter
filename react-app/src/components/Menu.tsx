@@ -7,7 +7,7 @@ import UserButton from './UserButton';
 const Menu = () => {
   return (
     <nav className="w-88 py-4 pl-24 flex flex-col justify-between">
-      <div className="space-y-8">
+      <div className="space-y-8 pr-10">
         <div>
           <p>tweet logo</p>
         </div>
