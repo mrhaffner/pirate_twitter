@@ -16,7 +16,7 @@ const FollowerSuggestion = ({ user }: Props) => {
           <p>@{user.handle}</p>
         </div>
       </div>
-      <button>Follow</button>
+      <button className="text-white bg-black rounded-full px-3">Follow</button>
     </div>
   );
 };
