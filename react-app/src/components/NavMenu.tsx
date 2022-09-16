@@ -4,7 +4,7 @@ import NavItem from './NavItem';
 import TweetButton from './TweetButton';
 import UserButton from './UserButton';
 
-const Menu = () => {
+const NavMenu = () => {
   return (
     <nav className="w-88 py-4 pl-24 flex flex-col justify-between">
       <div className="space-y-3 mr-10">
@@ -14,7 +14,7 @@ const Menu = () => {
         <NavItem name={'Home'} link={''}>
           <PirateShip />
         </NavItem>
-        <NavItem name={'Explore'} link={''}>
+        <NavItem name={'Explore'} link={'explore'}>
           <PirateMap />
         </NavItem>
         <TweetButton />
@@ -26,4 +26,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default NavMenu;

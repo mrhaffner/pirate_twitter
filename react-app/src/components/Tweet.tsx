@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import TweetData from '../types/TweetData';
 import Avatar from './Avatar';
 import LikeButton from './LikeButton';
@@ -13,14 +14,14 @@ const Tweet = ({ tweet }: Props) => {
   // update icons if liked or retweeted by me!!!
   return (
     <div className="border border-black no-overlap flex">
-      <div className="m-2">
+      <Link className="m-2" to={user.handle}>
         <Avatar seed={user.id} />
-      </div>
+      </Link>
       <div className="my-2 space-y-0.5 w-full">
         <div className="flex space-x-2">
-          <a href="#">
+          <Link to={user.handle}>
             <span>@{user.handle}</span>
-          </a>
+          </Link>
           <div className="-my-1">.</div>
           <div>{datetime}</div>
         </div>

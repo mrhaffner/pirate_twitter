@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
 interface Props {
   name: string;
@@ -8,12 +9,13 @@ interface Props {
 
 const NavItem = ({ name, link, children }: Props) => {
   return (
-    <div className="p-4 rounded-full hover:bg-gray-400">
-      <a href={link} className="flex space-x-6">
-        {children}
-        <span className="my-auto">{name}</span>
-      </a>
-    </div>
+    <Link
+      className="p-4 rounded-full hover:bg-gray-400 flex space-x-6"
+      to={link}
+    >
+      {children}
+      <span className="my-auto">{name}</span>
+    </Link>
   );
 };
 
