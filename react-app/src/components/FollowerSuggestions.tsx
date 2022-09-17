@@ -11,7 +11,7 @@ const FollowerSuggestions = ({ users }: Props) => {
       <div>You might Like</div>
       <div className="space-y-3">
         {users.map((user) => (
-          <FollowerSuggestion user={user} />
+          <FollowerSuggestion user={user} key={user.id} />
         ))}
       </div>
     </div>

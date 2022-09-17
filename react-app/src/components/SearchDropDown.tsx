@@ -9,7 +9,7 @@ const SearchDropDown = ({ users }: Props) => {
   return (
     <div>
       {users.map((user) => (
-        <SearchSuggestion user={user} />
+        <SearchSuggestion user={user} key={user.id} />
       ))}
     </div>
   );
