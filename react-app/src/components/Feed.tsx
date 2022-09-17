@@ -1,16 +1,16 @@
-import TweetData from '../types/TweetData';
+import useGetTweets from '../hooks/useGetTweets';
 import Tweet from './Tweet';
 
-interface Props {
-  tweets: TweetData[];
-}
+const Feed = () => {
+  const tweets = useGetTweets();
 
-const Feed = ({ tweets }: Props) => {
   return (
     <div className="w-152">
-      {tweets.map((tweet) => (
-        <Tweet tweet={tweet} />
-      ))}
+      {tweets.length ? (
+        tweets.map((tweet) => <Tweet key={tweet.id} tweet={tweet} />)
+      ) : (
+        <div>Loading</div>
+      )}
     </div>
   );
 };

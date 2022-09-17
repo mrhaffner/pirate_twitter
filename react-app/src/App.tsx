@@ -1,8 +1,6 @@
-import './App.css';
 import Feed from './components/Feed';
 import Menu from './components/NavMenu';
 import SideBar from './components/SideBar';
-import tweetData from './tweet_data.json';
 import { Outlet } from 'react-router-dom';
 
 const App = () => {
@@ -11,7 +9,7 @@ const App = () => {
       <Menu />
       <div>
         <Outlet />
-        <Feed tweets={tweetData} />
+        <Feed />
       </div>
       <SideBar />
     </div>
