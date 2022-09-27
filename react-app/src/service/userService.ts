@@ -51,3 +51,13 @@ export async function searchUsernames(partialUsername: string) {
     return [];
   }
 }
+
+// needs return type
+export async function getUserFromToken(token: string) {
+  try {
+    const response = await axios.get(`${baseUri}/token/${token}`);
+    return response.data;
+  } catch (error) {
+    return {}; // maybe null instead
+  }
+}
