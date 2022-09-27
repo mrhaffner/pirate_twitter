@@ -1,4 +1,11 @@
+import { useState } from 'react';
+import SignInModal from './SignInModal';
+import SignUpModal from './SignUpModal';
+
 const AuthPage = () => {
+  const [displaySignUpModal, setDisplaySignUpModal] = useState(false);
+  const [displaySignInModal, setDisplaySignInModal] = useState(false);
+
   return (
     <div className="flex justify-center mt-20">
       <div>
@@ -10,17 +17,29 @@ const AuthPage = () => {
           Join and sails the seas today.
         </h2>
         <div className="mt-4 w-80">
-          <button className="rounded-full text-center py-2 bg-gray-400 w-full">
+          <button
+            className="rounded-full text-center py-2 bg-gray-400 w-full"
+            onClick={() => setDisplaySignUpModal(true)}
+          >
             Sign up
           </button>
         </div>
         <h3 className="text-xl font-bold mt-20">Already a pirate?</h3>
         <div className="mt-4 w-80">
-          <button className="rounded-full text-center py-2 ring-2 ring-gray-400 w-full">
+          <button
+            className="rounded-full text-center py-2 ring-2 ring-gray-400 w-full"
+            onClick={() => setDisplaySignInModal(true)}
+          >
             Sign in
           </button>
         </div>
       </div>
+      {displaySignInModal ? (
+        <SignInModal closeModal={setDisplaySignInModal} />
+      ) : null}
+      {displaySignUpModal ? (
+        <SignUpModal closeModal={setDisplaySignUpModal} />
+      ) : null}
     </div>
   );
 };
