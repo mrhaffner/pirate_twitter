@@ -67,4 +67,16 @@ public class UserController {
     public List<User> searchForUsernames(@PathVariable String username) throws Exception {
         return userService.findAllUsernamesLike(username);
     }
+
+    // new, needs tests?
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value="/token")
+    public User getUserFromToken(Principal principal) {
+        String currentUsername = principal.getName();
+                User user = userService
+                        .findByUsername(currentUsername)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                                                    "User not found for username: " + currentUsername));
+        return user;
+    }
 }
