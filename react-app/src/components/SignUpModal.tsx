@@ -19,7 +19,7 @@ const SignUpModal = ({ closeModal }: Props) => {
       <form onSubmit={() => signup(username, password)}>
         <input value={username} onChange={(e) => setUsername(e.target.value)} />
         <input value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input value="Sign Up" type="submit" />
+        <input value="Sign up" type="submit" />
       </form>
     </Modal>
   );
