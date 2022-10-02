@@ -12,7 +12,7 @@ const Modal = ({ children, closeModal }: Props) => {
         <div className="relative w-auto my-6 mx-auto max-w-3xl">
           <div className="relative rounded bg-white">
             <button onClick={() => closeModal(false)}>X</button>
-            <form>{children}</form>
+            {children}
           </div>
         </div>
       </div>
