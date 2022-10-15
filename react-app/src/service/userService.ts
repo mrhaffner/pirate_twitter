@@ -55,9 +55,13 @@ export async function searchUsernames(partialUsername: string) {
 // needs return type
 export async function getUserFromToken(token: string) {
   try {
-    const response = await axios.get(`${baseUri}/token/${token}`);
+    const response = await axios.get(`${baseUri}/token/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
-    return {}; // maybe null instead
+    return null;
   }
 }

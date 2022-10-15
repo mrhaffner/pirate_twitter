@@ -18,7 +18,7 @@ export async function signup(username: string, password: string) {
 // needs return type
 export async function login(username: string, password: string) {
   try {
-    const response = await axios.post(`${baseUri}/login`, {
+    const response = await axios.post(`${baseUri}/signin`, {
       username,
       password,
     });

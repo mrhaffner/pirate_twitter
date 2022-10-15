@@ -1,5 +1,11 @@
+import PageWrapper from './PageWrapper';
+
 const Explore = () => {
-  return <div>explore</div>;
+  return (
+    <PageWrapper>
+      <div>explore</div>
+    </PageWrapper>
+  );
 };
 
 export default Explore;

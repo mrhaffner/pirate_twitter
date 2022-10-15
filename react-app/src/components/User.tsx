@@ -1,7 +1,13 @@
 // what if no user id input?
 
+import PageWrapper from './PageWrapper';
+
 const User = () => {
-  return <div>user</div>;
+  return (
+    <PageWrapper>
+      <div>user</div>
+    </PageWrapper>
+  );
 };
 
 export default User;
