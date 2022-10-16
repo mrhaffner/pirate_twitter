@@ -11,10 +11,10 @@ const NavMenu = () => {
         <div>
           <p>tweet logo</p>
         </div>
-        <NavItem name={'Home'} link={''}>
+        <NavItem name={'Home'} link={'/'}>
           <PirateShip />
         </NavItem>
-        <NavItem name={'Explore'} link={'explore'}>
+        <NavItem name={'Explore'} link={'/explore'}>
           <PirateMap />
         </NavItem>
         <TweetButton />

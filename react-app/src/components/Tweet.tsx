@@ -14,12 +14,12 @@ const Tweet = ({ tweet }: Props) => {
   // update icons if liked or retweeted by me!!!
   return (
     <div className="border border-black no-overlap flex">
-      <Link className="m-2" to={user.username}>
+      <Link className="m-2" to={`/${user.username}`}>
         <Avatar seed={user.id} />
       </Link>
       <div className="my-2 space-y-0.5 w-full">
         <div className="flex space-x-2">
-          <Link to={user.username}>
+          <Link to={`/${user.username}`}>
             <span>@{user.username}</span>
           </Link>
           <div className="-my-1">.</div>
