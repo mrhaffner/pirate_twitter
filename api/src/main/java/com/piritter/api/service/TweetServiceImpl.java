@@ -23,12 +23,12 @@ public class TweetServiceImpl implements TweetService {
     private PirateService pirateService;
     
     @Override
-    public TweetResponse saveNewTweet(TweetRequest tweetDto, String currentUserName) throws Exception {
+    public TweetResponse saveNewTweet(String content, String currentUserName) throws Exception {
         User user = userRepository
                         .findByUsername(currentUserName)
                         .orElseThrow(() -> new Exception(("User not found for username: " + currentUserName)));
 
-        String translatedTweet = pirateService.translate(tweetDto.getContent());
+        String translatedTweet = pirateService.translate(content);
         Tweet tweet = new Tweet(translatedTweet, user);
         tweetRepository.save(tweet);
         return new TweetResponse(tweet);

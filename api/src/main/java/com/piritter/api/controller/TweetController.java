@@ -31,7 +31,7 @@ public class TweetController {
     @PostMapping
     public TweetResponse createTweet(Principal principal, @RequestBody TweetRequest tweetDto) throws Exception {
         String username = principal.getName();
-        return tweetService.saveNewTweet(tweetDto, username);
+        return tweetService.saveNewTweet(tweetDto.getContent(), username);
     }
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)

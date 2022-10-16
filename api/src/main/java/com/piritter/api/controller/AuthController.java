@@ -1,8 +1,6 @@
 package com.piritter.api.controller;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -20,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.piritter.api.model.ERole;
-import com.piritter.api.model.Role;
-import com.piritter.api.model.User;
 import com.piritter.api.payload.request.LoginRequest;
 import com.piritter.api.payload.request.SignupRequest;
 import com.piritter.api.payload.response.JwtResponse;
@@ -87,6 +82,4 @@ public class AuthController {
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
-
-
 }
