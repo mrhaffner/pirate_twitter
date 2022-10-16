@@ -73,10 +73,10 @@ public class UserController {
     @GetMapping(value="/token")
     public User getUserFromToken(Principal principal) {
         String currentUsername = principal.getName();
-                User user = userService
-                        .findByUsername(currentUsername)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
-                                                    "User not found for username: " + currentUsername));
+        User user = userService
+                .findByUsername(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                                            "User not found for username: " + currentUsername));
         return user;
     }
 }

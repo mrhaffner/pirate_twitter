@@ -31,6 +31,7 @@ import com.piritter.api.repository.RoleRepository;
 import com.piritter.api.repository.UserRepository;
 import com.piritter.api.security.jwt.JwtUtils;
 import com.piritter.api.security.services.UserDetailsImpl;
+import com.piritter.api.service.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,6 +49,9 @@ public class AuthController {
 
   @Autowired
   PasswordEncoder encoder;
+
+  @Autowired
+  UserService userService;
 
   @Autowired
   JwtUtils jwtUtils;
@@ -74,23 +78,15 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    boolean success = userService.registerUser(signUpRequest.getUsername(), signUpRequest.getPassword());
+    if (!success) {
       return ResponseEntity
           .badRequest()
           .body(new MessageResponse("Error: Username is already taken!"));
     }
 
-    User user = new User(signUpRequest.getUsername(), 
-            encoder.encode(signUpRequest.getPassword()));
-
-    Set<Role> roles = new HashSet<>();
-    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        
-    roles.add(userRole);
-    user.setRoles(roles);
-    userRepository.save(user);
-
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+
+
 }

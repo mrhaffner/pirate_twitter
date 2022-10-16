@@ -10,4 +10,5 @@ public interface UserService {
     public void unfollowUser(String currentUsername, String otherUsername) throws Exception;
     public Optional<User> findByUsername(String username);
     public List<User> findAllUsernamesLike(String username);
+    public boolean registerUser(String username, String password);
 }
