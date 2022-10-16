@@ -53,7 +53,7 @@ public class PirateServiceImpl implements PirateService {
 
     private List<String> splitText(String text) {
         List<String> splitPhrase = new ArrayList<>();
-        for (String word : Arrays.asList(text.split(" "))) {
+        for (String word : Arrays.asList(text.split("\s+"))) {
             String lastChar = String.valueOf(word.charAt(word.length() - 1));
             if (word.length() <= 1) {
                 splitPhrase.add(word);

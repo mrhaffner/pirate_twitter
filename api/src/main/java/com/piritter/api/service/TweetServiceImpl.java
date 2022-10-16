@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.piritter.api.model.Tweet;
 import com.piritter.api.model.User;
-import com.piritter.api.payload.request.TweetRequest;
 import com.piritter.api.payload.response.TweetResponse;
 import com.piritter.api.repository.TweetRepository;
 import com.piritter.api.repository.UserRepository;
