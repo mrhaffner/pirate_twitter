@@ -4,6 +4,7 @@ type UserState = {
   user: any;
   loginFailed: boolean;
   loadingUser: boolean;
+  token: string;
   login: (username: string, password: string) => void;
   logout: () => void;
 };
@@ -14,6 +15,7 @@ export const UserContext = createContext<UserState>({
   logout: () => {},
   loginFailed: false,
   loadingUser: true,
+  token: '',
 });
 
 // type UserState = {

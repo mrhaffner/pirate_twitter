@@ -7,7 +7,7 @@
     "datetime": "may 4",
     "user": {
       "id": 1,
-      "handle": "stevesie",
+      "username": "stevesie",
       "following": [2]
     }
   },
@@ -19,7 +19,7 @@
     "datetime": "may 4",
     "user": {
       "id": 2,
-      "handle": "bob",
+      "username": "bob",
       "following": []
     }
   }

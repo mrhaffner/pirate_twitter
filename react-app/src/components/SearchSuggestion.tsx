@@ -10,7 +10,7 @@ const SearchSuggestion = ({ user }: Props) => {
     <a href="#">
       <Avatar seed={user.id} />
       <div>
-        <p>@{user.handle}</p>
+        <p>@{user.username}</p>
         <div>
           <span>icon</span>
           <span>numfollowers K followers</span>

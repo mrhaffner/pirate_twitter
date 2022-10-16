@@ -8,7 +8,8 @@ interface Props {
 }
 
 const UserProvider = ({ children }: Props) => {
-  const [token, setToken] = useState<string | null>(null);
+  // const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState('');
   const [user, setUser] = useState(null);
   const [loginFailed, setLoginFailed] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -43,29 +44,16 @@ const UserProvider = ({ children }: Props) => {
     }
   };
 
-  // const login = async (username: string, password: string) => {
-  //   const userResponse = await loginService(username, password);
-  //   const tokenResponse = (await userResponse?.token) ?? null;
-  //   if (tokenResponse) {
-  //     setToken(userResponse.token);
-  //     localStorage.setItem('piritter-user-token', userResponse.token);
-  //     setLoginFailed(false);
-  //   } else {
-  //     console.log('ho');
-  //     setLoginFailed(true);
-  //   }
-  // };
-
   const logout = () => {
     localStorage.removeItem('piritter-user-token');
-    setToken(null);
+    setToken(''); // this used to be null
     setUser(null);
-    // setUserFound(false);
+    setLoadingUser(true);
   };
 
   return (
     <UserContext.Provider
-      value={{ user, login, logout, loginFailed, loadingUser }}
+      value={{ user, login, logout, loginFailed, loadingUser, token }}
     >
       {children}
     </UserContext.Provider>

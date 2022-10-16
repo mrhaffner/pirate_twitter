@@ -9,21 +9,21 @@ interface Props {
 }
 
 const Tweet = ({ tweet }: Props) => {
-  const { id, datetime, content, user, likeCount, retweetCount } = tweet;
+  const { id, creationTime, content, user, likeCount, retweetCount } = tweet;
   // needs to generate updated datetime
   // update icons if liked or retweeted by me!!!
   return (
     <div className="border border-black no-overlap flex">
-      <Link className="m-2" to={user.handle}>
+      <Link className="m-2" to={user.username}>
         <Avatar seed={user.id} />
       </Link>
       <div className="my-2 space-y-0.5 w-full">
         <div className="flex space-x-2">
-          <Link to={user.handle}>
-            <span>@{user.handle}</span>
+          <Link to={user.username}>
+            <span>@{user.username}</span>
           </Link>
           <div className="-my-1">.</div>
-          <div>{datetime}</div>
+          <div>{creationTime}</div>
         </div>
         <div>
           <div>{content}</div>

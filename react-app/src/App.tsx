@@ -23,13 +23,13 @@ const App = () => {
         <div>loading</div>
       ) : (
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="" element={<Home />} />
+          <Route path="explore" element={<Explore />} />
           <Route
-            path="/login"
+            path="login"
             element={user ? <Navigate replace to="/" /> : <AuthPage />}
           />
-          <Route path="/:user" element={<User />} />
+          <Route path=":username" element={<User />} />
         </Routes>
       )}
     </>

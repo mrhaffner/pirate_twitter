@@ -10,11 +10,11 @@ const FollowerSuggestion = ({ user }: Props) => {
   return (
     <div className="flex justify-between">
       <div className="flex space-x-2">
-        <Link to={user.handle}>
+        <Link to={user.username}>
           <Avatar seed={user.id} />
         </Link>
-        <Link to={user.handle}>
-          <p>@{user.handle}</p>
+        <Link to={user.username}>
+          <p>@{user.username}</p>
         </Link>
       </div>
       <button className="text-white bg-black rounded-full px-3">Follow</button>

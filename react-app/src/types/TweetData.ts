@@ -5,6 +5,6 @@ export default interface TweetData {
   content: string;
   likeCount: number;
   retweetCount: number;
-  datetime: string;
+  creationTime: string;
   user: User;
 }
